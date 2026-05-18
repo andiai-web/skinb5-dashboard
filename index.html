@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkinB5 — Growth 2026 Dashboard</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --teal:#335c67;--teal-mid:#4a7c8a;--teal-lt:#d6e8ec;
+  --gold:#e09f3e;--gold-lt:#fff3b0;
+  --red:#9e2a2b;--cherry:#540b0e;
+  --mint:#2a9d8f;--google:#4285f4;
+  --bg:#f2ede6;--card:#fff;--card2:#f7f3ed;
+  --text:#1a1612;--muted:#7a6f65;--border:rgba(51,92,103,0.13);
+}
+body{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--text);}
+
+/* ── HEADER ── */
+.hdr{background:var(--teal);padding:15px 28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px rgba(51,92,103,0.3);position:sticky;top:0;z-index:50;}
+.hdr h1{font-size:15px;font-weight:600;color:var(--gold-lt);}
+.hdr p{font-size:10px;color:rgba(255,243,176,0.55);margin-top:2px;}
+.badges{display:flex;gap:7px;flex-wrap:wrap;}
+.badge{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;}
+.bg{background:var(--gold);color:#1a0800;}
+.bt{background:rgba(255,243,176,0.15);color:var(--gold-lt);border:0.5px solid rgba(255,243,176,0.3);}
+.bm{background:var(--mint);color:#fff;}
+.br{background:var(--red);color:#fff;}
+
+/* ── FRESHNESS ── */
+.fresh{background:#1a3a40;padding:7px 28px;display:flex;align-items:center;gap:12px;font-size:10px;color:rgba(255,243,176,0.6);border-bottom:1px solid rgba(255,243,176,0.08);}
+.fdot{width:6px;height:6px;border-radius:50%;background:var(--mint);flex-shrink:0;}
+
+/* ── LAYOUT ── */
+.page{max-width:1120px;margin:0 auto;padding:20px 24px 56px;}
+.sec{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px;}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:10px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+
+/* ── KPI CARDS ── */
+.kpi{background:var(--card2);border-radius:11px;padding:13px 14px;border-left:3px solid var(--border);}
+.kpi.teal{border-color:var(--teal);} .kpi.gold{border-color:var(--gold);}
+.kpi.red{border-color:var(--red);} .kpi.cherry{border-color:var(--cherry);}
+.kpi.mint{border-color:var(--mint);} .kpi.gg{border-color:var(--google);}
+.kpi-lbl{font-size:10px;color:var(--muted);font-weight:500;margin-bottom:4px;}
+.kpi-val{font-size:22px;font-weight:600;line-height:1;}
+.kpi-sub{font-size:10px;color:var(--muted);margin-top:4px;}
+.kpi-tgt{font-size:10px;color:var(--muted);opacity:0.7;margin-top:2px;}
+.pb-wrap{margin-top:7px;background:rgba(0,0,0,0.07);border-radius:3px;height:4px;overflow:hidden;}
+.pb{height:4px;border-radius:3px;}
+.pb.teal{background:var(--teal);} .pb.gold{background:var(--gold);}
+.pb.red{background:var(--red);} .pb.cherry{background:var(--cherry);}
+.pb.mint{background:var(--mint);} .pb.gg{background:var(--google);}
+.chip{display:inline-flex;align-items:center;gap:3px;font-size:10px;padding:2px 7px;border-radius:8px;margin-top:5px;font-weight:500;}
+.chip-ok{background:rgba(42,157,143,0.12);color:var(--mint);}
+.chip-warn{background:rgba(224,159,62,0.12);color:#b87a00;}
+.chip-bad{background:rgba(158,42,43,0.1);color:var(--red);}
+
+/* ── LAYERS ── */
+.layers{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px;}
+.layer{border-radius:11px;padding:13px;}
+.l1{background:#1a3a40;} .l2{background:#2d1a0a;} .l3{background:#3a1a1b;} .l4{background:#1e1a3a;}
+.ln{font-size:9px;font-weight:600;letter-spacing:0.06em;margin-bottom:5px;}
+.n1{color:#5fced8;} .n2{color:#e09f3e;} .n3{color:#c96b6b;} .n4{color:#9b8ed8;}
+.lrev{font-size:22px;font-weight:600;color:var(--gold-lt);}
+.lsub{font-size:10px;color:rgba(255,243,176,0.35);margin-top:1px;margin-bottom:9px;}
+.lrow{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,243,176,0.52);padding:3px 0;border-bottom:0.5px solid rgba(255,243,176,0.07);}
+.lrow:last-child{border-bottom:none;}
+.lval{color:rgba(255,243,176,0.9);font-weight:600;}
+
+/* ── CHARTS ── */
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:14px 18px;margin-bottom:10px;}
+.ct{font-size:12px;font-weight:600;margin-bottom:3px;}
+.cs{font-size:11px;color:var(--muted);margin-bottom:12px;}
+
+/* ── STAT TABLES ── */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:13px 16px;}
+.stat-title{font-size:11px;font-weight:600;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.srow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--border);font-size:11px;}
+.srow:last-child{border-bottom:none;}
+.slbl{color:var(--muted);}
+.sval{font-weight:600;}
+.ok{color:var(--mint);} .warn{color:#b87a00;} .bad{color:var(--red);}
+
+/* ── ADS ── */
+.ads-card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:13px;}
+.ads-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.ads-logo{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.lm{background:#1877f2;color:#fff;} .lt{background:#111;color:#fff;font-size:9px;} .lg{background:#fff;border:1px solid #ddd;color:#4285f4;}
+.aname{font-size:12px;font-weight:600;}
+.asrc{font-size:10px;color:var(--muted);}
+.arow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--border);}
+.arow:last-child{border-bottom:none;}
+.albl{font-size:11px;color:var(--muted);}
+.aval{font-size:13px;font-weight:600;}
+.atgt{font-size:10px;color:var(--muted);text-align:right;}
+
+/* ── BLENDED ── */
+.blended{background:#1a3a40;border-radius:11px;padding:14px 18px;margin-bottom:10px;}
+.bl-title{font-size:11px;font-weight:600;color:var(--gold-lt);margin-bottom:12px;}
+.bl-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+.blc{text-align:center;}
+.bll{font-size:9px;color:rgba(255,243,176,0.5);margin-bottom:3px;}
+.blv{font-size:16px;font-weight:600;color:var(--gold-lt);}
+.blt{font-size:9px;color:rgba(255,243,176,0.35);margin-top:2px;}
+
+/* ── UPDATE GUIDE ── */
+.guide{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:14px 18px;margin-bottom:10px;}
+.guide-title{font-size:12px;font-weight:600;color:var(--teal);margin-bottom:10px;}
+.grow{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:0.5px solid var(--border);}
+.grow:last-child{border-bottom:none;}
+.gnum{width:22px;height:22px;border-radius:50%;background:var(--teal);color:var(--gold-lt);font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.gtxt{font-size:11px;color:var(--muted);line-height:1.55;}
+.gtxt strong{color:var(--text);}
+.gtxt code{font-family:'DM Mono',monospace;font-size:10px;background:var(--card2);padding:1px 5px;border-radius:4px;}
+
+.footer{font-size:10px;color:var(--muted);margin-top:16px;padding:12px 16px;background:var(--card2);border-radius:10px;line-height:1.8;}
+.footer strong{color:var(--text);}
+
+/* ── LEGEND DOTS ── */
+.ldot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <h1>SkinB5 — Growth 2026 Dashboard</h1>
+    <p>90-day sprint · $184K incremental revenue target · Meta · TikTok Ads · Google Ads</p>
+  </div>
+  <div class="badges">
+    <span class="badge bg">Day ~14 · Week 2</span>
+    <span class="badge bt">Baseline: $12.2K/mo</span>
+    <span class="badge br">MTD $5.3K</span>
+    <span class="badge bt">Built 18 May 2026 05:22 AEST</span>
+  </div>
+</div>
+
+<div class="fresh">
+  <span class="fdot"></span>
+  <span>Data current to <strong style="color:var(--gold-lt);">Week 2</strong> · Auto-built from Master KPI Tracker · Updates automatically when Excel is uploaded to GitHub</span>
+  <span style="margin-left:auto;font-family:'DM Mono',monospace;opacity:0.6;">70 metrics · 6 sheets</span>
+</div>
+
+<div class="page">
+
+<div class="sec">Overall revenue trajectory — Week 2 actuals</div>
+<div class="g4">
+  <div class="kpi mint">
+    <div class="kpi-lbl">Weekly revenue (AUD)</div>
+    <div class="kpi-val">$2.5K</div>
+    <div class="kpi-sub">33 orders this week</div>
+    <div class="kpi-tgt">Target: $5,500/wk by W13</div>
+    <div class="pb-wrap"><div class="pb mint" style="width:46%"></div></div>
+    <div class="chip chip-bad">⚠ $2,960 below weekly target</div>
+  </div>
+  <div class="kpi gold">
+    <div class="kpi-lbl">Monthly revenue MTD</div>
+    <div class="kpi-val">$5.3K</div>
+    <div class="kpi-sub">2 weeks in · On track check</div>
+    <div class="kpi-tgt">Target: $22,000/mo by Day 90</div>
+    <div class="pb-wrap"><div class="pb gold" style="width:24%"></div></div>
+  </div>
+  <div class="kpi red">
+    <div class="kpi-lbl">Average order value</div>
+    <div class="kpi-val">$72.23</div>
+    <div class="kpi-sub">W1 $71.21 → W2 $72.23</div>
+    <div class="kpi-tgt">Target: +15% → ~$82</div>
+    <div class="pb-wrap"><div class="pb red" style="width:88%"></div></div>
+    <div class="chip chip-ok">↑ improving week on week</div>
+  </div>
+  <div class="kpi teal">
+    <div class="kpi-lbl">Customer LTV</div>
+    <div class="kpi-val">$145.13</div>
+    <div class="kpi-sub">W1 $85.70 → W2 $145.13</div>
+    <div class="kpi-tgt">Target: +20% vs baseline</div>
+    <div class="pb-wrap"><div class="pb teal" style="width:100%"></div></div>
+    <div class="chip chip-ok">✓ Above +20% target</div>
+  </div>
+</div>
+
+<div class="sec">Revenue by growth layer — 90-day plan</div>
+<div class="layers">
+  <div class="layer l1">
+    <div class="ln n1">L1 — BRAND VIRALITY (AU)</div>
+    <div class="lrev">$30K</div>
+    <div class="lsub">TikTok · Instagram · Substack</div>
+    <div class="lrow"><span>TikTok avg views</span><span class="lval">644</span></div>
+    <div class="lrow"><span>TikTok ER</span><span class="lval">1.2%</span></div>
+    <div class="lrow"><span>IG weekly reach</span><span class="lval">1.6K</span></div>
+    <div class="lrow"><span>Social → sessions</span><span class="lval">13</span></div>
+    <div class="lrow"><span>TikTok followers</span><span class="lval">19.8K</span></div>
+  </div>
+  <div class="layer l2">
+    <div class="ln n2">L2 — DISTRIBUTION AUTHORITY</div>
+    <div class="lrev">$15K</div>
+    <div class="lsub">5 clinics × $1K/mo × 3 months</div>
+    <div class="lrow"><span>Clinics pitched</span><span class="lval">— / 20</span></div>
+    <div class="lrow"><span>Clinics closed</span><span class="lval">— / 5</span></div>
+    <div class="lrow"><span>Close rate target</span><span class="lval">25%</span></div>
+    <div class="lrow"><span>Clinic rev/mo</span><span class="lval">—</span></div>
+    <div class="lrow"><span>Reorder rate</span><span class="lval">—</span></div>
+  </div>
+  <div class="layer l3">
+    <div class="ln n3">L3 — DTC LOYALTY + LTV</div>
+    <div class="lrev">$139K</div>
+    <div class="lsub">$85K prospects · $42K winback</div>
+    <div class="lrow"><span>Email list</span><span class="lval">26.4K</span></div>
+    <div class="lrow"><span>Repeat rate</span><span class="lval">60.0%</span></div>
+    <div class="lrow"><span>Welcome CVR</span><span class="lval">1.9% (tgt 3%)</span></div>
+    <div class="lrow"><span>Win-back CVR</span><span class="lval">2.3% (tgt 8%)</span></div>
+    <div class="lrow"><span>LTV</span><span class="lval">$145.13</span></div>
+  </div>
+  <div class="layer l4">
+    <div class="ln n4">L4 — ASIA EXPANSION</div>
+    <div class="lrev">Foundation</div>
+    <div class="lsub">China MTD · Korea baseline</div>
+    <div class="lrow"><span>China MTD</span><span class="lval">$3.9K</span></div>
+    <div class="lrow"><span>China vs target</span><span class="lval">5.0%</span></div>
+    <div class="lrow"><span>Korea monthly</span><span class="lval">$1.7K</span></div>
+    <div class="lrow"><span>KOLs activated</span><span class="lval">0 / 5</span></div>
+    <div class="lrow"><span>Post-90d pipeline</span><span class="lval">Building</span></div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="chart-card">
+    <div class="ct">Revenue ramp — cumulative actual vs 90-day target</div>
+    <div class="cs">Dashed = $184K target path · Gold = your actual cumulative revenue</div>
+    <div style="position:relative;height:185px;"><canvas id="rampChart"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <div class="ct">Revenue split by layer — 90-day plan</div>
+    <div class="cs">L3 DTC carries 76% — email CVRs and repeat rate are the engine</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+      <span style="font-size:11px;color:var(--muted);"><span style="width:10px;height:10px;border-radius:2px;background:var(--teal);display:inline-block;margin-right:3px;"></span>L1 $30K</span>
+      <span style="font-size:11px;color:var(--muted);"><span style="width:10px;height:10px;border-radius:2px;background:var(--gold);display:inline-block;margin-right:3px;"></span>L2 $15K</span>
+      <span style="font-size:11px;color:var(--muted);"><span style="width:10px;height:10px;border-radius:2px;background:var(--red);display:inline-block;margin-right:3px;"></span>L3 $139K</span>
+    </div>
+    <div style="position:relative;height:155px;"><canvas id="splitChart"></canvas></div>
+  </div>
+</div>
+
+<div class="sec">L1 — Social media & brand virality</div>
+<div class="g5">
+  <div class="kpi teal">
+    <div class="kpi-lbl">TikTok followers</div>
+    <div class="kpi-val">19.8K</div>
+    <div class="kpi-sub">+26 new this week</div>
+    <div class="kpi-tgt">Target: +3K by Day 90</div>
+    <div class="pb-wrap"><div class="pb teal" style="width:100%"></div></div>
+    <div class="chip chip-bad">⚠ Need +230/wk, got +26</div>
+  </div>
+  <div class="kpi teal">
+    <div class="kpi-lbl">IG weekly reach</div>
+    <div class="kpi-val">1.6K</div>
+    <div class="kpi-sub">Unique accounts reached</div>
+    <div class="kpi-tgt">Target: 10,000+/wk</div>
+    <div class="pb-wrap"><div class="pb teal" style="width:16%"></div></div>
+    <div class="chip chip-bad">⚠ 16% of reach target</div>
+  </div>
+  <div class="kpi teal">
+    <div class="kpi-lbl">TikTok avg views/video</div>
+    <div class="kpi-val">644</div>
+    <div class="kpi-sub">466 total views · 3 videos</div>
+    <div class="kpi-tgt">Target: 5,000 avg</div>
+    <div class="pb-wrap"><div class="pb teal" style="width:13%"></div></div>
+    <div class="chip chip-bad">↑ Up from 287 W1 — improving</div>
+  </div>
+  <div class="kpi teal">
+    <div class="kpi-lbl">TikTok engagement rate</div>
+    <div class="kpi-val">1.2%</div>
+    <div class="kpi-sub">Likes + comments / views</div>
+    <div class="kpi-tgt">Target: &gt;4%</div>
+    <div class="pb-wrap"><div class="pb teal" style="width:30%"></div></div>
+    <div class="chip chip-bad">⚠ 30% of ER target</div>
+  </div>
+  <div class="kpi teal">
+    <div class="kpi-lbl">Social → site sessions</div>
+    <div class="kpi-val">13</div>
+    <div class="kpi-sub">TikTok + IG combined</div>
+    <div class="kpi-tgt">Target: 2,000/wk</div>
+    <div class="pb-wrap"><div class="pb teal" style="width:1%"></div></div>
+    <div class="chip chip-bad">⚠ Only 1% of traffic target</div>
+  </div>
+</div>
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-title"><i class="ti ti-world"></i> Website performance (GA4)</div>
+    <div class="srow"><span class="slbl">Total sessions/week</span><span class="sval">1.1K</span></div>
+    <div class="srow"><span class="slbl">Organic sessions</span><span class="sval">258</span></div>
+    <div class="srow"><span class="slbl">Paid sessions</span><span class="sval">249</span></div>
+    <div class="srow"><span class="slbl">Email sessions</span><span class="sval">31</span></div>
+    <div class="srow"><span class="slbl">Store CVR</span><span class="sval bad">1.7% <span style="font-size:10px;color:var(--muted);">(tgt &gt;2.5%)</span></span></div>
+    <div class="srow"><span class="slbl">Add to cart rate</span><span class="sval">4.6%</span></div>
+    <div class="srow"><span class="slbl">Checkout completion</span><span class="sval">37.7%</span></div>
+    <div class="srow"><span class="slbl">Cart abandonment</span><span class="sval bad">62.3% ↑ high</span></div>
+    <div class="srow"><span class="slbl">Avg session duration</span><span class="sval">108s</span></div>
+    <div class="srow"><span class="slbl">Bounce rate</span><span class="sval">56.0%</span></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-title"><i class="ti ti-mail"></i> Email & CRM (Klaviyo)</div>
+    <div class="srow"><span class="slbl">Total subscribers</span><span class="sval">26.4K</span></div>
+    <div class="srow"><span class="slbl">Engaged subscribers</span><span class="sval">4.7K <span style="font-size:10px;color:var(--muted);">(17.9% engaged)</span></span></div>
+    <div class="srow"><span class="slbl">New subs this week</span><span class="sval bad">27 <span style="font-size:10px;color:var(--muted);">(tgt +50/wk)</span></span></div>
+    <div class="srow"><span class="slbl">Unsubscribe rate</span><span class="sval">1.00%</span></div>
+    <div class="srow"><span class="slbl">Welcome open rate</span><span class="sval">23.7%</span></div>
+    <div class="srow"><span class="slbl">Welcome CVR</span><span class="sval bad">1.9% <span style="font-size:10px;">(tgt 3%)</span></span></div>
+    <div class="srow"><span class="slbl">Welcome revenue</span><span class="sval">$76.81</span></div>
+    <div class="srow"><span class="slbl">Win-back open rate</span><span class="sval">33.6%</span></div>
+    <div class="srow"><span class="slbl">Win-back CVR</span><span class="sval bad">2.3% <span style="font-size:10px;">(tgt 8%)</span></span></div>
+    <div class="srow"><span class="slbl">Win-back revenue</span><span class="sval">$296.01</span></div>
+    <div class="srow"><span class="slbl">Cart recovery rate</span><span class="sval">3.7%</span></div>
+  </div>
+</div>
+
+<div class="sec">L3 — DTC loyalty + LTV engine</div>
+<div class="g5">
+  <div class="kpi red">
+    <div class="kpi-lbl">Email list size</div>
+    <div class="kpi-val">26.4K</div>
+    <div class="kpi-sub">4.7K engaged (17.9%)</div>
+    <div class="kpi-tgt">+50 new/wk target</div>
+    <div class="pb-wrap"><div class="pb red" style="width:100%"></div></div>
+    <div class="chip chip-bad">⚠ Only +27 new subs (tgt 50/wk)</div>
+  </div>
+  <div class="kpi red">
+    <div class="kpi-lbl">Welcome flow CVR</div>
+    <div class="kpi-val">1.9%</div>
+    <div class="kpi-sub">Revenue: $76.81</div>
+    <div class="kpi-tgt">Target: 3% CVR</div>
+    <div class="pb-wrap"><div class="pb red" style="width:63%"></div></div>
+    <div class="chip chip-bad">⚠ Below 3% — review email copy & offer</div>
+  </div>
+  <div class="kpi red">
+    <div class="kpi-lbl">Win-back CVR</div>
+    <div class="kpi-val">2.3%</div>
+    <div class="kpi-sub">Revenue: $296.01</div>
+    <div class="kpi-tgt">Target: 8% CVR</div>
+    <div class="pb-wrap"><div class="pb red" style="width:29%"></div></div>
+    <div class="chip chip-bad">⚠ Below 8% — strengthen offer & urgency</div>
+  </div>
+  <div class="kpi red">
+    <div class="kpi-lbl">Repeat purchase rate</div>
+    <div class="kpi-val">60.0%</div>
+    <div class="kpi-sub">18 returning · 12 new</div>
+    <div class="kpi-tgt">Target: &gt;35%</div>
+    <div class="pb-wrap"><div class="pb red" style="width:100%"></div></div>
+    <div class="chip chip-ok">✓ Well above 35% target</div>
+  </div>
+  <div class="kpi red">
+    <div class="kpi-lbl">Customer LTV</div>
+    <div class="kpi-val">$145.13</div>
+    <div class="kpi-sub">Churn: 40.0% · Active: 28</div>
+    <div class="kpi-tgt">Target: +20% → ~$103</div>
+    <div class="pb-wrap"><div class="pb red" style="width:100%"></div></div>
+    <div class="chip chip-ok">✓ LTV above target</div>
+  </div>
+</div>
+
+<div class="sec">Paid ads — Meta · TikTok · Google</div>
+<div class="g3">
+  <div class="ads-card">
+    <div class="ads-hdr">
+      <div class="ads-logo lm">f</div>
+      <div><div class="aname">Meta Ads</div><div class="asrc">Facebook + Instagram · Meta Ads Manager</div></div>
+    </div>
+    <div class="arow"><span class="albl">Weekly spend</span><div style="text-align:right"><div class="aval">$210.62</div><div class="atgt">Track vs budget</div></div></div>
+    <div class="arow"><span class="albl">Revenue attributed</span><div style="text-align:right"><div class="aval">$602.37</div></div></div>
+    <div class="arow"><span class="albl">ROAS</span><div style="text-align:right"><div class="aval ok">2.86×</div><div class="atgt">Target: &gt;2.5×</div></div></div>
+    <div class="arow"><span class="albl">CPC</span><div style="text-align:right"><div class="aval ok">$1.19</div><div class="atgt">Target: &lt;$1.20</div></div></div>
+    <div class="arow"><span class="albl">CTR</span><div style="text-align:right"><div class="aval">0.79%</div><div class="atgt">Target: &gt;1.5%</div></div></div>
+    <div class="arow"><span class="albl">Purchases</span><div style="text-align:right"><div class="aval">4</div></div></div>
+    <div class="arow"><span class="albl">CAC</span><div style="text-align:right"><div class="aval bad">$52.66</div><div class="atgt">Target: &lt;$30</div></div></div>
+  </div>
+  <div class="ads-card">
+    <div class="ads-hdr">
+      <div class="ads-logo lt">TT</div>
+      <div><div class="aname">TikTok Ads</div><div class="asrc">TikTok Ads Manager</div></div>
+    </div>
+    <div class="arow"><span class="albl">Weekly spend</span><div style="text-align:right"><div class="aval">—</div><div class="atgt">Enter in KPI tracker</div></div></div>
+    <div class="arow"><span class="albl">ROAS</span><div style="text-align:right"><div class="aval">—</div><div class="atgt">Target: &gt;2.5×</div></div></div>
+    <div class="arow"><span class="albl">CPC</span><div style="text-align:right"><div class="aval">—</div><div class="atgt">Target: &lt;$0.80</div></div></div>
+    <div class="arow"><span class="albl">Video completion</span><div style="text-align:right"><div class="aval">—</div><div class="atgt">Target: &gt;25%</div></div></div>
+    <div class="arow"><span class="albl">CAC</span><div style="text-align:right"><div class="aval">—</div><div class="atgt">Target: &lt;$30</div></div></div>
+  </div>
+  <div class="ads-card">
+    <div class="ads-hdr">
+      <div class="ads-logo lg">G</div>
+      <div><div class="aname">Google Ads</div><div class="asrc">Search + Shopping · Google Ads Manager</div></div>
+    </div>
+    <div class="arow"><span class="albl">Weekly spend</span><div style="text-align:right"><div class="aval">$397.45</div><div class="atgt">Track vs budget</div></div></div>
+    <div class="arow"><span class="albl">Revenue attributed</span><div style="text-align:right"><div class="aval">$451.55</div></div></div>
+    <div class="arow"><span class="albl">ROAS</span><div style="text-align:right"><div class="aval bad">1.14×</div><div class="atgt">Target: &gt;3.0×</div></div></div>
+    <div class="arow"><span class="albl">CPC</span><div style="text-align:right"><div class="aval warn">$2.23</div><div class="atgt">Target: &lt;$1.50</div></div></div>
+    <div class="arow"><span class="albl">CTR</span><div style="text-align:right"><div class="aval">1.03%</div><div class="atgt">Target: &gt;3%</div></div></div>
+    <div class="arow"><span class="albl">Conversions</span><div style="text-align:right"><div class="aval">7.6</div></div></div>
+    <div class="arow"><span class="albl">CAC</span><div style="text-align:right"><div class="aval bad">$52.31</div><div class="atgt">Target: &lt;$30</div></div></div>
+    <div class="arow"><span class="albl">Quality Score</span><div style="text-align:right"><div class="aval ok">10 / 10</div><div class="atgt">Target: &gt;6</div></div></div>
+  </div>
+</div>
+
+<div class="blended">
+  <div class="bl-title">⚡ Blended paid ads — Meta + Google combined (TikTok data pending)</div>
+  <div class="bl-grid">
+    <div class="blc"><div class="bll">Total spend/week</div><div class="blv">$608.07</div><div class="blt">Meta + Google</div></div>
+    <div class="blc"><div class="bll">Blended ROAS</div><div class="blv" style="color:#e09f3e">1.73×</div><div class="blt">Target &gt;2.5×</div></div>
+    <div class="blc"><div class="bll">Blended CAC</div><div class="blv" style="color:#e55">$52.42</div><div class="blt">Target &lt;$30</div></div>
+    <div class="blc"><div class="bll">Total purchases</div><div class="blv">11.6</div><div class="blt">Meta + Google</div></div>
+    <div class="blc"><div class="bll">Ad spend % of revenue</div><div class="blv" style="color:#7effd6">23.9%</div><div class="blt">Target &lt;25%</div></div>
+  </div>
+</div>
+
+<div class="chart-card">
+  <div class="ct">Paid channel ROAS — week by week</div>
+  <div class="cs">Meta target 2.5× · Google target 3.0×. Dashed line = minimum viable 2.5×.</div>
+  <div style="display:flex;gap:12px;margin-bottom:10px;">
+    <span style="font-size:11px;color:var(--muted);"><span style="width:10px;height:10px;border-radius:2px;background:#1877f2;display:inline-block;margin-right:3px;"></span>Meta</span>
+    <span style="font-size:11px;color:var(--muted);"><span style="width:10px;height:10px;border-radius:2px;background:#4285f4;display:inline-block;margin-right:3px;"></span>Google</span>
+  </div>
+  <div style="position:relative;height:170px;"><canvas id="roasChart"></canvas></div>
+</div>
+
+<div class="sec">L4 — Asia expansion · China 🇨🇳 + South Korea 🇰🇷</div>
+<div class="g4">
+  <div class="kpi cherry">
+    <div class="kpi-lbl">China MTD sales (AUD)</div>
+    <div class="kpi-val">$3.9K</div>
+    <div class="kpi-sub">7 days elapsed of 31</div>
+    <div class="kpi-tgt">May monthly target: $3,000</div>
+    <div class="pb-wrap"><div class="pb cherry" style="width:100%"></div></div>
+  </div>
+  <div class="kpi cherry">
+    <div class="kpi-lbl">China % of target</div>
+    <div class="kpi-val">5.0%</div>
+    <div class="kpi-sub">Run-rate vs $3,000 target</div>
+    <div class="kpi-tgt">Target: &gt;100%</div>
+    <div class="pb-wrap"><div class="pb cherry" style="width:5%"></div></div>
+    <div class="chip chip-bad">⚠ Note: verify monthly target in sheet</div>
+  </div>
+  <div class="kpi cherry">
+    <div class="kpi-lbl">South Korea monthly (AUD)</div>
+    <div class="kpi-val">$1.7K</div>
+    <div class="kpi-sub">W1 baseline data</div>
+    <div class="kpi-tgt">Baseline tracking — target after 3 months</div>
+    <div class="pb-wrap"><div class="pb cherry" style="width:100%"></div></div>
+  </div>
+  <div class="kpi cherry">
+    <div class="kpi-lbl">KOLs activated</div>
+    <div class="kpi-val">0 / 5</div>
+    <div class="kpi-sub">China + Korea combined</div>
+    <div class="kpi-tgt">Target: 5 by Day 60</div>
+    <div class="pb-wrap"><div class="pb cherry" style="width:0%"></div></div>
+  </div>
+</div>
+
+<div class="sec">How to update this dashboard</div>
+<div class="guide">
+  <div class="guide-title">📋 Every Monday — 3 steps, takes under 5 minutes</div>
+  <div class="grow"><div class="gnum">1</div><div class="gtxt"><strong>Your specialist fills in the Excel KPI tracker</strong> — she adds this week's column (W3, W4...) across all 6 tabs: Shopify, Email, Social, Clinic, Asia, Paid Ads. Takes ~40 minutes Monday morning.</div></div>
+  <div class="grow"><div class="gnum">2</div><div class="gtxt"><strong>She uploads the updated Excel to GitHub</strong> — go to <code>github.com/[yourusername]/skinb5-dashboard</code> → <code>data</code> folder → drag and drop the new file → commit. GitHub Actions runs automatically.</div></div>
+  <div class="grow"><div class="gnum">3</div><div class="gtxt"><strong>Dashboard updates within 3 minutes</strong> — everyone who opens the Notion page or the GitHub Pages URL sees the fresh data. No Claude needed, no manual steps, fully automatic.</div></div>
+</div>
+
+<div class="footer">
+  <strong>How the math works:</strong> Baseline $12.2K/mo → Day 90 target $22K/mo (+80%). Sprint total: L1 $30K + L2 $15K + L3 $139K = <strong>$184K.</strong>
+  L3 carries 76% — the three most urgent gaps right now: Welcome CVR 1.9% vs 3% target, Win-back CVR 2.3% vs 8% target, and Cart abandonment at 62.3%.
+  Meta ROAS 2.86× is approaching the 2.5× target. Google ROAS 1.14× is below the 3.0× target — review keyword match types and landing page alignment.
+  Google Quality Score 10/10 is excellent. Repeat purchase rate 60.0% is well above the 35% target — a genuine strength.
+  Built automatically from Master KPI Tracker · 18 May 2026 05:22 AEST
+</div>
+
+</div>
+
+<script>
+const W=['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12','W13'];
+const TR=[0,6000,14000,30000,47000,64000,82000,100000,118000,136000,154000,170000,184000];
+const AR=[2755.3, 5295.52, null, null, null, null, null, null, null, null, null, null, null];
+const MR=[1.62, 2.86, null, null, null, null, null, null, null, null, null, null, null];
+const GR=[null, 1.14, null, null, null, null, null, null, null, null, null, null, null];
+
+new Chart(document.getElementById('rampChart'),{type:'line',data:{labels:W,datasets:[
+  {label:'Target',data:TR,borderColor:'#335c67',backgroundColor:'rgba(51,92,103,0.07)',borderWidth:2,borderDash:[5,3],pointRadius:3,pointBackgroundColor:'#335c67',fill:true,tension:0.3},
+  {label:'Actual',data:AR,borderColor:'#e09f3e',backgroundColor:'rgba(224,159,62,0.08)',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#e09f3e',fill:false,tension:0.3,spanGaps:false}
+]},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>c.dataset.label+': $'+(c.parsed.y||0).toLocaleString()}}},
+  scales:{x:{ticks:{font:{size:10},maxRotation:0},grid:{display:false}},y:{ticks:{font:{size:10},callback:(v)=>'$'+Math.round(v/1000)+'K'},grid:{color:'rgba(0,0,0,0.05)'}}}
+}});
+
+new Chart(document.getElementById('splitChart'),{type:'doughnut',data:{labels:['L1 $30K','L2 $15K','L3 $139K'],
+  datasets:[{data:[30000,15000,139000],backgroundColor:['#335c67','#e09f3e','#9e2a2b'],borderWidth:0,hoverOffset:4}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:false}}}});
+
+new Chart(document.getElementById('roasChart'),{type:'bar',data:{labels:W,datasets:[
+  {label:'Meta ROAS',data:MR,backgroundColor:'#1877f2',borderWidth:0,borderRadius:3},
+  {label:'Google ROAS',data:GR,backgroundColor:'#4285f4',borderWidth:0,borderRadius:3}
+]},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>c.dataset.label+': '+(c.parsed.y||0).toFixed(2)+'×'}}},
+  scales:{x:{ticks:{font:{size:10},maxRotation:0},grid:{display:false}},
+    y:{min:0,max:5,ticks:{font:{size:10},callback:(v)=>v+'×'},grid:{color:'rgba(0,0,0,0.05)'},
+      afterDraw(chart){const ctx=chart.ctx,yS=chart.scales.y,xS=chart.scales.x,y=yS.getPixelForValue(2.5);
+        ctx.save();ctx.setLineDash([4,4]);ctx.strokeStyle='#e09f3e';ctx.lineWidth=1.5;
+        ctx.beginPath();ctx.moveTo(xS.left,y);ctx.lineTo(xS.right,y);ctx.stroke();
+        ctx.fillStyle='#e09f3e';ctx.font='bold 9px Arial';ctx.fillText('Min viable 2.5×',xS.right-78,y-4);ctx.restore();
+      }
+    }
+  }
+}});
+</script>
+</body>
+</html>
