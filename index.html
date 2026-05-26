@@ -125,6 +125,24 @@ body{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--tex
 
 /* ── LEGEND DOTS ── */
 .ldot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;}
+
+/* ── SUBSTACK ── */
+.ss-header{background:linear-gradient(135deg,#ff6719 0%,#ff8c42 100%);border-radius:11px;padding:14px 18px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
+.ss-title{font-size:13px;font-weight:600;color:#fff;}
+.ss-sub{font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px;}
+.ss-badge{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,0.2);color:#fff;border:0.5px solid rgba(255,255,255,0.35);}
+.ss-launch{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:8px;padding:8px 14px;font-size:11px;color:rgba(255,255,255,0.85);display:flex;align-items:center;gap:8px;}
+.ss-funnel{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:14px 18px;margin-bottom:10px;}
+.ss-funnel-title{font-size:11px;font-weight:600;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.funnel-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:0.5px solid var(--border);}
+.funnel-row:last-child{border-bottom:none;}
+.funnel-stage{font-size:11px;color:var(--muted);width:200px;flex-shrink:0;}
+.funnel-bar-wrap{flex:1;background:var(--card2);border-radius:4px;height:22px;overflow:hidden;position:relative;}
+.funnel-fill{height:100%;display:flex;align-items:center;padding-left:8px;font-size:10px;font-weight:600;color:#fff;border-radius:4px;}
+.funnel-val{font-size:12px;font-weight:600;color:var(--text);width:80px;text-align:right;flex-shrink:0;}
+.funnel-tgt{font-size:10px;color:var(--muted);width:80px;text-align:right;flex-shrink:0;}
+.kpi.ss{border-left-color:#ff6719;}
+.pb.ss{background:#ff6719;}
 </style>
 </head>
 <body>
@@ -138,14 +156,14 @@ body{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--tex
     <span class="badge bg">Day ~14 · Week 2</span>
     <span class="badge bt">Baseline: $12.2K/mo</span>
     <span class="badge br">MTD $5.3K</span>
-    <span class="badge bt">Built 18 May 2026 05:22 AEST</span>
+    <span class="badge bt">Built 26 May 2026 03:12 AEST</span>
   </div>
 </div>
 
 <div class="fresh">
   <span class="fdot"></span>
   <span>Data current to <strong style="color:var(--gold-lt);">Week 2</strong> · Auto-built from Master KPI Tracker · Updates automatically when Excel is uploaded to GitHub</span>
-  <span style="margin-left:auto;font-family:'DM Mono',monospace;opacity:0.6;">70 metrics · 6 sheets</span>
+  <span style="margin-left:auto;font-family:'DM Mono',monospace;opacity:0.6;">75 metrics · 7 sheets</span>
 </div>
 
 <div class="page">
@@ -190,12 +208,12 @@ body{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--tex
   <div class="layer l1">
     <div class="ln n1">L1 — BRAND VIRALITY (AU)</div>
     <div class="lrev">$30K</div>
-    <div class="lsub">TikTok · Instagram · Substack</div>
+    <div class="lsub">Substack hub → TikTok · IG · Email spokes</div>
+    <div class="lrow"><span>Substack subscribers</span><span class="lval">Launched 26 May</span></div>
+    <div class="lrow"><span>Substack open rate</span><span class="lval">—</span></div>
     <div class="lrow"><span>TikTok avg views</span><span class="lval">644</span></div>
-    <div class="lrow"><span>TikTok ER</span><span class="lval">1.2%</span></div>
     <div class="lrow"><span>IG weekly reach</span><span class="lval">1.6K</span></div>
     <div class="lrow"><span>Social → sessions</span><span class="lval">13</span></div>
-    <div class="lrow"><span>TikTok followers</span><span class="lval">19.8K</span></div>
   </div>
   <div class="layer l2">
     <div class="ln n2">L2 — DISTRIBUTION AUTHORITY</div>
@@ -247,7 +265,7 @@ body{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--tex
   </div>
 </div>
 
-<div class="sec">L1 — Social media & brand virality</div>
+<div class="sec">L1 — Brand virality · TikTok, Instagram & website traffic</div>
 <div class="g5">
   <div class="kpi teal">
     <div class="kpi-lbl">TikTok followers</div>
@@ -291,7 +309,7 @@ body{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--tex
   </div>
 </div>
 
-<div class="stat-grid">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
   <div class="stat-card">
     <div class="stat-title"><i class="ti ti-world"></i> Website performance (GA4)</div>
     <div class="srow"><span class="slbl">Total sessions/week</span><span class="sval">1.1K</span></div>
@@ -305,19 +323,194 @@ body{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--tex
     <div class="srow"><span class="slbl">Avg session duration</span><span class="sval">108s</span></div>
     <div class="srow"><span class="slbl">Bounce rate</span><span class="sval">56.0%</span></div>
   </div>
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    <!-- Combined email summary bar -->
+    <div style="background:#1a3a40;border-radius:11px;padding:12px 16px;">
+      <div style="font-size:10px;font-weight:600;color:var(--gold-lt);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;">
+        <span>📧 Email total — InstantAI flows + Klaviyo campaigns</span>
+        <span style="font-size:9px;opacity:0.6;">Combined picture</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+        <div style="text-align:center;">
+          <div style="font-size:9px;color:rgba(255,243,176,0.5);margin-bottom:3px;">Total email revenue</div>
+          <div style="font-size:18px;font-weight:600;color:var(--gold-lt);">—</div>
+          <div style="font-size:9px;color:rgba(255,243,176,0.35);">IAI + Klaviyo</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:9px;color:rgba(255,243,176,0.5);margin-bottom:3px;">Email % of revenue</div>
+          <div style="font-size:18px;font-weight:600;color:var(--gold-lt);">—</div>
+          <div style="font-size:9px;color:rgba(255,243,176,0.35);">Target &gt;15%</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:9px;color:rgba(255,243,176,0.5);margin-bottom:3px;">List size</div>
+          <div style="font-size:18px;font-weight:600;color:var(--gold-lt);">26.4K</div>
+          <div style="font-size:9px;color:rgba(255,243,176,0.35);">+27/wk</div>
+        </div>
+      </div>
+    </div>
+    <!-- InstantAI flows -->
+    <div class="stat-card">
+      <div class="stat-title" style="color:#ff6719;"><i class="ti ti-bolt"></i> InstantAI — automated flows</div>
+      <div class="srow"><span class="slbl">Flow revenue this week</span><span class="sval ">—</span></div>
+      <div class="srow"><span class="slbl">Flow CVR (all flows)</span><span class="sval ">— <span style="font-size:10px;color:var(--muted);">(tgt &gt;3%)</span></span></div>
+      <div class="srow"><span class="slbl">Abandoned cart recovery</span><span class="sval ">— <span style="font-size:10px;color:var(--muted);">(tgt &gt;15%)</span></span></div>
+      <div class="srow"><span class="slbl">Active flows running</span><span class="sval">— <span style="font-size:10px;color:var(--muted);">(welcome·winback·cart·post-purch)</span></span></div>
+    </div>
+    <!-- Klaviyo campaigns -->
+    <div class="stat-card">
+      <div class="stat-title" style="color:#335c67;"><i class="ti ti-speakerphone"></i> Klaviyo — campaign sends</div>
+      <div class="srow"><span class="slbl">Campaign revenue this week</span><span class="sval">— (no send this wk)</span></div>
+      <div class="srow"><span class="slbl">Campaign open rate</span><span class="sval ">— <span style="font-size:10px;color:var(--muted);">(tgt &gt;25%)</span></span></div>
+      <div class="srow"><span class="slbl">Click-through rate</span><span class="sval ">— <span style="font-size:10px;color:var(--muted);">(tgt &gt;3%)</span></span></div>
+      <div class="srow"><span class="slbl">Unsubscribe rate</span><span class="sval bad">1.00% <span style="font-size:10px;color:var(--muted);">(tgt &lt;0.2%)</span></span></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">L1 — Substack · The content hub that generates all social & email</div>
+
+<div class="ss-header">
+  <div>
+    <div class="ss-title">✍️ Substack by Judy — The Inside-Out Letter · Content hub for all L1 channels</div>
+    <div class="ss-sub">1 post per week (Tuesday 7am AEST) → feeds TikTok, Instagram, and email · Launched 26 May 2026</div>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <span class="ss-badge">Hub → 3 TikToks + 2 IG + 1 email per post</span>
+    <span class="ss-badge">90d target: $15K–$43K revenue</span>
+  </div>
+</div>
+
+<div class="ss-launch" style="background:#fff7f0;border:1px solid rgba(255,103,25,0.25);border-radius:10px;padding:10px 16px;margin-bottom:10px;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:10px;">
+  <span style="font-size:18px;">📅</span>
+  <span><strong style="color:var(--text);">Launch context:</strong> Substack launched 26 May 2026 — one week later than planned. W1 data from 2 June. Targets unchanged. <strong style="color:var(--text);">Why Substack sits here:</strong> Each post is the single source that spawns 3 TikToks, 2 IG posts, and a Thursday email digest. It is the engine of L1, not a separate channel.</span>
+</div>
+
+<div class="g5">
+  <div class="kpi ss">
+    <div class="kpi-lbl">Total subscribers</div>
+    <div class="kpi-val">W1 →</div>
+    <div class="kpi-sub">Substack dashboard</div>
+    <div class="kpi-tgt">Target: 800–2,000 by Day 90</div>
+    <div class="pb-wrap"><div class="pb ss" style="width:0%"></div></div>
+  </div>
+  <div class="kpi ss">
+    <div class="kpi-lbl">New subscribers this week</div>
+    <div class="kpi-val">—</div>
+    <div class="kpi-sub">From all channels</div>
+    <div class="kpi-tgt">Target: +60/wk by W12</div>
+    <div class="pb-wrap"><div class="pb ss" style="width:0%"></div></div>
+    <div class="chip chip-bad">⚠ Need +60/wk by W12</div>
+  </div>
+  <div class="kpi ss">
+    <div class="kpi-lbl">Post open rate</div>
+    <div class="kpi-val">—</div>
+    <div class="kpi-sub">Substack analytics</div>
+    <div class="kpi-tgt">Target: ≥45%</div>
+    <div class="pb-wrap"><div class="pb ss" style="width:0%"></div></div>
+    <div class="chip chip-bad">⚠ Below 45% target</div>
+  </div>
+  <div class="kpi ss">
+    <div class="kpi-lbl">TikTok atoms shipped</div>
+    <div class="kpi-val">—</div>
+    <div class="kpi-sub">Videos from each post</div>
+    <div class="kpi-tgt">Target: 3/week</div>
+    <div class="pb-wrap"><div class="pb ss" style="width:0%"></div></div>
+    <div class="chip chip-bad">⚠ Need 3 TikToks per post</div>
+  </div>
+  <div class="kpi ss">
+    <div class="kpi-lbl">IG carousel saves</div>
+    <div class="kpi-val">—</div>
+    <div class="kpi-sub">Per post (saves predict subs)</div>
+    <div class="kpi-tgt">Target: ≥80 saves/post</div>
+    <div class="pb-wrap"><div class="pb ss" style="width:0%"></div></div>
+    <div class="chip chip-bad">⚠ Below 80 saves target</div>
+  </div>
+</div>
+
+<div class="g2">
   <div class="stat-card">
-    <div class="stat-title"><i class="ti ti-mail"></i> Email & CRM (Klaviyo)</div>
-    <div class="srow"><span class="slbl">Total subscribers</span><span class="sval">26.4K</span></div>
-    <div class="srow"><span class="slbl">Engaged subscribers</span><span class="sval">4.7K <span style="font-size:10px;color:var(--muted);">(17.9% engaged)</span></span></div>
-    <div class="srow"><span class="slbl">New subs this week</span><span class="sval bad">27 <span style="font-size:10px;color:var(--muted);">(tgt +50/wk)</span></span></div>
-    <div class="srow"><span class="slbl">Unsubscribe rate</span><span class="sval">1.00%</span></div>
-    <div class="srow"><span class="slbl">Welcome open rate</span><span class="sval">23.7%</span></div>
-    <div class="srow"><span class="slbl">Welcome CVR</span><span class="sval bad">1.9% <span style="font-size:10px;">(tgt 3%)</span></span></div>
-    <div class="srow"><span class="slbl">Welcome revenue</span><span class="sval">$76.81</span></div>
-    <div class="srow"><span class="slbl">Win-back open rate</span><span class="sval">33.6%</span></div>
-    <div class="srow"><span class="slbl">Win-back CVR</span><span class="sval bad">2.3% <span style="font-size:10px;">(tgt 8%)</span></span></div>
-    <div class="srow"><span class="slbl">Win-back revenue</span><span class="sval">$296.01</span></div>
-    <div class="srow"><span class="slbl">Cart recovery rate</span><span class="sval">3.7%</span></div>
+    <div class="stat-title">📊 Community health</div>
+    <div class="srow"><span class="slbl">Posts published</span><span class="sval">— <span style="font-size:10px;color:var(--muted);">(tgt 1/wk Tue 7am AEST)</span></span></div>
+    <div class="srow"><span class="slbl">Reader replies (DMs + email)</span><span class="sval ">— <span style="font-size:10px;color:var(--muted);">(tgt ≥20/wk)</span></span></div>
+    <div class="srow"><span class="slbl">Anonymous Q&A submissions</span><span class="sval">— <span style="font-size:10px;color:var(--muted);">(tgt ≥40/mo)</span></span></div>
+    <div class="srow"><span class="slbl">Founding readers signed</span><span class="sval ">— <span style="font-size:10px;color:var(--muted);">(tgt 100 by W12)</span></span></div>
+    <div class="srow"><span class="slbl">Subscriber → purchase CVR</span><span class="sval ">— <span style="font-size:10px;color:var(--muted);">(tgt 6–8%)</span></span></div>
+    <div class="srow"><span class="slbl">Substack repeat purchase rate</span><span class="sval">— <span style="font-size:10px;color:var(--muted);">(tgt ≥45%)</span></span></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-title">💰 Substack revenue attribution</div>
+    <div class="srow"><span class="slbl">Direct revenue (subscriber code)</span><span class="sval">—</span></div>
+    <div class="srow"><span class="slbl">90-day direct target</span><span class="sval" style="color:var(--muted);">$5K–$15K</span></div>
+    <div class="srow"><span class="slbl">90-day halo estimate (2–3×)</span><span class="sval" style="color:var(--muted);">$15K–$45K</span></div>
+    <div class="srow"><span class="slbl">Revenue tracked via</span><span class="sval" style="font-size:10px;color:var(--muted);">Unique subscriber code + UTM</span></div>
+    <div class="srow"><span class="slbl">Subscriber-only code</span><span class="sval" style="color:var(--red);">Set up before W1 post</span></div>
+    <div class="srow"><span class="slbl">Cross-promo flywheel</span><span class="sval" style="font-size:10px;color:var(--muted);">1 post → 3 TikToks + 2 IG + 1 email</span></div>
+  </div>
+</div>
+
+<div class="ss-funnel">
+  <div class="ss-funnel-title">📐 Substack growth funnel — 90-day model</div>
+  <div class="funnel-row">
+    <div class="funnel-stage">TikTok/IG views (Substack content)</div>
+    <div class="funnel-bar-wrap"><div class="funnel-fill" style="width:100%;background:#ff6719;">120,000 → 250,000 monthly views target</div></div>
+    <div class="funnel-val">—</div>
+    <div class="funnel-tgt">120K–250K</div>
+  </div>
+  <div class="funnel-row">
+    <div class="funnel-stage">Substack subscribers</div>
+    <div class="funnel-bar-wrap"><div class="funnel-fill" style="width:0%;background:#ff8c42;">Launching</div></div>
+    <div class="funnel-val">—</div>
+    <div class="funnel-tgt">800–2,000</div>
+  </div>
+  <div class="funnel-row">
+    <div class="funnel-stage">Engaged (opened ≥2 posts)</div>
+    <div class="funnel-bar-wrap"><div class="funnel-fill" style="width:40%;background:#e09f3e;">~40% of subscribers</div></div>
+    <div class="funnel-val">—</div>
+    <div class="funnel-tgt">320–800</div>
+  </div>
+  <div class="funnel-row">
+    <div class="funnel-stage">First purchase (sub code)</div>
+    <div class="funnel-bar-wrap"><div class="funnel-fill" style="width:0%;background:#9e2a2b;">6–8% CVR of engaged subs</div></div>
+    <div class="funnel-val">—</div>
+    <div class="funnel-tgt">48–144 customers</div>
+  </div>
+  <div class="funnel-row" style="background:var(--card2);border-radius:6px;margin-top:4px;">
+    <div class="funnel-stage" style="color:var(--text);font-weight:600;">90-day revenue (direct + halo)</div>
+    <div class="funnel-bar-wrap"><div class="funnel-fill" style="width:0%;background:#335c67;">Tracking from W1</div></div>
+    <div class="funnel-val" style="color:var(--red);font-weight:600;">—</div>
+    <div class="funnel-tgt">$15K–$43K</div>
+  </div>
+</div>
+
+<div class="sec">L2 — Clinic & distribution pipeline</div>
+<div class="g4">
+  <div class="kpi gold">
+    <div class="kpi-lbl">Clinics pitched</div>
+    <div class="kpi-val">— / 20</div>
+    <div class="kpi-sub">Manual outreach log</div>
+    <div class="kpi-tgt">Target: 20 by Day 45</div>
+    <div class="pb-wrap"><div class="pb gold" style="width:0%"></div></div>
+  </div>
+  <div class="kpi gold">
+    <div class="kpi-lbl">Clinics closed</div>
+    <div class="kpi-val">— / 5</div>
+    <div class="kpi-sub">Manual outreach log</div>
+    <div class="kpi-tgt">Target: 5 by Day 60</div>
+    <div class="pb-wrap"><div class="pb gold" style="width:0%"></div></div>
+  </div>
+  <div class="kpi gold">
+    <div class="kpi-lbl">Clinic reorder rate</div>
+    <div class="kpi-val">—</div>
+    <div class="kpi-sub">Once first orders placed</div>
+    <div class="kpi-tgt">Target: &gt;80%</div>
+    <div class="pb-wrap"><div class="pb gold" style="width:0%"></div></div>
+  </div>
+  <div class="kpi gold">
+    <div class="kpi-lbl">Clinic revenue/mo</div>
+    <div class="kpi-val">—</div>
+    <div class="kpi-sub">B2B Shopify orders</div>
+    <div class="kpi-tgt">Target: $5K/mo by Day 90</div>
+    <div class="pb-wrap"><div class="pb gold" style="width:0%"></div></div>
   </div>
 </div>
 
@@ -420,10 +613,11 @@ body{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--tex
 
 <div class="chart-card">
   <div class="ct">Paid channel ROAS — week by week</div>
-  <div class="cs">Meta target 2.5× · Google target 3.0×. Dashed line = minimum viable 2.5×.</div>
+  <div class="cs">Meta (blue) · TikTok (red) · Google (yellow). All targets: Meta &amp; TikTok &gt;2.5×, Google &gt;3.0×. Dashed line = minimum viable 2.5×.</div>
   <div style="display:flex;gap:12px;margin-bottom:10px;">
     <span style="font-size:11px;color:var(--muted);"><span style="width:10px;height:10px;border-radius:2px;background:#1877f2;display:inline-block;margin-right:3px;"></span>Meta</span>
-    <span style="font-size:11px;color:var(--muted);"><span style="width:10px;height:10px;border-radius:2px;background:#4285f4;display:inline-block;margin-right:3px;"></span>Google</span>
+    <span style="font-size:11px;color:var(--muted);"><span style="width:10px;height:10px;border-radius:2px;background:#ff2d55;display:inline-block;margin-right:3px;"></span>TikTok</span>
+    <span style="font-size:11px;color:var(--muted);"><span style="width:10px;height:10px;border-radius:2px;background:#fbbc04;display:inline-block;margin-right:3px;"></span>Google</span>
   </div>
   <div style="position:relative;height:170px;"><canvas id="roasChart"></canvas></div>
 </div>
@@ -464,7 +658,7 @@ body{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--tex
 <div class="sec">How to update this dashboard</div>
 <div class="guide">
   <div class="guide-title">📋 Every Monday — 3 steps, takes under 5 minutes</div>
-  <div class="grow"><div class="gnum">1</div><div class="gtxt"><strong>Your specialist fills in the Excel KPI tracker</strong> — she adds this week's column (W3, W4...) across all 6 tabs: Shopify, Email, Social, Clinic, Asia, Paid Ads. Takes ~40 minutes Monday morning.</div></div>
+  <div class="grow"><div class="gnum">1</div><div class="gtxt"><strong>Your specialist fills in the Excel KPI tracker</strong> — she adds this week's column (W3, W4...) across all 7 tabs: Shopify, Email, Social, Clinic, Asia, Paid Ads, and Substack. Takes ~40 minutes Monday morning.</div></div>
   <div class="grow"><div class="gnum">2</div><div class="gtxt"><strong>She uploads the updated Excel to GitHub</strong> — go to <code>github.com/[yourusername]/skinb5-dashboard</code> → <code>data</code> folder → drag and drop the new file → commit. GitHub Actions runs automatically.</div></div>
   <div class="grow"><div class="gnum">3</div><div class="gtxt"><strong>Dashboard updates within 3 minutes</strong> — everyone who opens the Notion page or the GitHub Pages URL sees the fresh data. No Claude needed, no manual steps, fully automatic.</div></div>
 </div>
@@ -474,7 +668,7 @@ body{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--tex
   L3 carries 76% — the three most urgent gaps right now: Welcome CVR 1.9% vs 3% target, Win-back CVR 2.3% vs 8% target, and Cart abandonment at 62.3%.
   Meta ROAS 2.86× is approaching the 2.5× target. Google ROAS 1.14× is below the 3.0× target — review keyword match types and landing page alignment.
   Google Quality Score 10/10 is excellent. Repeat purchase rate 60.0% is well above the 35% target — a genuine strength.
-  Built automatically from Master KPI Tracker · 18 May 2026 05:22 AEST
+  Built automatically from Master KPI Tracker · 26 May 2026 03:12 AEST
 </div>
 
 </div>
@@ -484,6 +678,7 @@ const W=['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12','W13'];
 const TR=[0,6000,14000,30000,47000,64000,82000,100000,118000,136000,154000,170000,184000];
 const AR=[2755.3, 5295.52, null, null, null, null, null, null, null, null, null, null, null];
 const MR=[1.62, 2.86, null, null, null, null, null, null, null, null, null, null, null];
+const TR_DATA=[null, null, null, null, null, null, null, null, null, null, null, null, null];
 const GR=[null, 1.14, null, null, null, null, null, null, null, null, null, null, null];
 
 new Chart(document.getElementById('rampChart'),{type:'line',data:{labels:W,datasets:[
@@ -500,7 +695,8 @@ new Chart(document.getElementById('splitChart'),{type:'doughnut',data:{labels:['
 
 new Chart(document.getElementById('roasChart'),{type:'bar',data:{labels:W,datasets:[
   {label:'Meta ROAS',data:MR,backgroundColor:'#1877f2',borderWidth:0,borderRadius:3},
-  {label:'Google ROAS',data:GR,backgroundColor:'#4285f4',borderWidth:0,borderRadius:3}
+  {label:'TikTok ROAS',data:TR_DATA,backgroundColor:'#ff2d55',borderWidth:0,borderRadius:3},
+  {label:'Google ROAS',data:GR,backgroundColor:'#fbbc04',borderWidth:0,borderRadius:3}
 ]},options:{responsive:true,maintainAspectRatio:false,
   plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>c.dataset.label+': '+(c.parsed.y||0).toFixed(2)+'×'}}},
   scales:{x:{ticks:{font:{size:10},maxRotation:0},grid:{display:false}},
