@@ -44,17 +44,23 @@ def clean_val(v):
     """Convert any cell value to a clean float or None."""
     if v is None: return None
     s = str(v).strip()
-    if s in ['—', '-', '', 'None', '→ Update weekly']: return None
+    if s in ['—', '-', '', 'None', '→ Update weekly', 'N/a', 'N/A', 'n/a']: return None
     if s.startswith(('→','Track','Target','Update')): return None
-    s2 = re.sub(r'[$,`]', '', s).strip().rstrip('.')
-    # Handle 'k' suffix e.g. 10.8k, 1.9k
-    if re.match(r'^[\d.]+k$', s2, re.I):
-        try: return float(s2[:-1]) * 1000
+    # Remove currency symbols, commas, backticks, dollar signs, A$
+    s2 = re.sub(r'[A-Z]?\$|,|`', '', s).strip().rstrip('.')
+    # Handle 'k' suffix e.g. 10.8k, 1.9k, 2k, 1.8k (with or without spaces)
+    m = re.match(r'^([\d.]+)\s*k$', s2.strip(), re.I)
+    if m:
+        try: return float(m.group(1)) * 1000
         except: pass
-    # Handle percentage strings e.g. "23.7 %"
-    s3 = s2.replace(' %','').replace('%','').strip()
-    try: return float(s3)
-    except: return None
+    # Handle percentage strings e.g. "23.7 %", "56%%"
+    s3 = re.sub(r'%+', '', s2).strip()
+    # Handle strings with text suffix like "80.9 New", "85%% New"
+    s3 = re.sub(r'[^\d.-].*$', '', s3).strip()
+    if s3:
+        try: return float(s3)
+        except: pass
+    return None
 
 def extract_data(wb):
     """Extract all metrics from all sheets into a flat dict."""
@@ -297,7 +303,8 @@ def build_html(data, built_at):
 
     g_spend      = num(['google ads weekly spend'])
     g_rev        = num(['google ads revenue attributed'])
-    g_roas       = num(['google ads roas'])
+    g_roas_raw   = num(['google ads roas'])
+    g_roas       = min(g_roas_raw, 15) if g_roas_raw and g_roas_raw > 15 else g_roas_raw
     g_cpc        = num(['google ads cpc — cost per click'])
     g_ctr        = num(['google ads ctr — click-through rate'], pct_decimal=True)
     g_purch      = num(['google ads conversions'])
@@ -313,9 +320,10 @@ def build_html(data, built_at):
 
     # Chart data
     actual_ramp   = cum_ramp(['weekly revenue (aud)'])
-    meta_roas_arr = arr(['meta roas (return on ad spend)'], cap=20)
+    meta_roas_arr = arr(['meta roas (return on ad spend)'], cap=15)
+    # Cap Google ROAS at 15 — anything above is a data entry/tracking error
     tt_roas_arr   = arr(['tiktok roas'], cap=20)
-    g_roas_arr    = arr(['google ads roas'], cap=20)
+    g_roas_arr    = arr(['google ads roas'], cap=15)
 
     # Current week label
     r = find(['weekly revenue (aud)'])
@@ -486,7 +494,7 @@ body{{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--te
     <p>90-day sprint · $184K incremental revenue target · Meta · TikTok Ads · Google Ads</p>
   </div>
   <div class="badges">
-    <span class="badge bg">Day ~14 · {wk_label}</span>
+    <span class="badge bg">{wk_label}</span>
     <span class="badge bt">Baseline: $12.2K/mo</span>
     <span class="badge {'bm' if (monthly_rev or 0) > 12200 else 'br'}">MTD {fc(monthly_rev)}</span>
     <span class="badge bt">Built {built_at}</span>
@@ -521,7 +529,7 @@ body{{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--te
   <div class="kpi red">
     <div class="kpi-lbl">Average order value</div>
     <div class="kpi-val">{fc(aov,2)}</div>
-    <div class="kpi-sub">W1 $71.21 → W2 $72.23</div>
+    <div class="kpi-sub">Latest week · Orders: {fn(orders,0)}</div>
     <div class="kpi-tgt">Target: +15% → ~$82</div>
     <div class="pb-wrap"><div class="pb red" style="width:{pb(aov,82)}%"></div></div>
     {chip((aov or 0)>71, '↑ improving week on week', '↓ AOV declining')}
@@ -529,7 +537,7 @@ body{{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--te
   <div class="kpi teal">
     <div class="kpi-lbl">Customer LTV</div>
     <div class="kpi-val">{fc(ltv,2)}</div>
-    <div class="kpi-sub">W1 $85.70 → W2 $145.13</div>
+    <div class="kpi-sub">Latest: {fc(ltv,2)} · Active: {fn(active_custs)}</div>
     <div class="kpi-tgt">Target: +20% vs baseline</div>
     <div class="pb-wrap"><div class="pb teal" style="width:{pb(ltv,103)}%"></div></div>
     {chip((ltv or 0)>103, '✓ Above +20% target', '⚠ Below LTV target')}
@@ -924,7 +932,7 @@ body{{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--te
     </div>
     <div class="arow"><span class="albl">Weekly spend</span><div style="text-align:right"><div class="aval">{fc(g_spend,2)}</div><div class="atgt">Track vs budget</div></div></div>
     <div class="arow"><span class="albl">Revenue attributed</span><div style="text-align:right"><div class="aval">{fc(g_rev,2)}</div></div></div>
-    <div class="arow"><span class="albl">ROAS</span><div style="text-align:right"><div class="aval {roas_cls(g_roas,3)}">{fx(g_roas)}</div><div class="atgt">Target: &gt;3.0×</div></div></div>
+    <div class="arow"><span class="albl">ROAS</span><div style="text-align:right"><div class="aval {roas_cls(g_roas,3)}">{fx(g_roas)}</div><div class="atgt">Target: &gt;3.0× {'⚠ W1 data error capped' if (g_roas_raw or 0) > 15 else ''}</div></div></div>
     <div class="arow"><span class="albl">CPC</span><div style="text-align:right"><div class="aval {'warn' if (g_cpc or 0)>1.5 else 'ok'}">{fc(g_cpc,2)}</div><div class="atgt">Target: &lt;$1.50</div></div></div>
     <div class="arow"><span class="albl">CTR</span><div style="text-align:right"><div class="aval">{fp(g_ctr,2)}</div><div class="atgt">Target: &gt;3%</div></div></div>
     <div class="arow"><span class="albl">Conversions</span><div style="text-align:right"><div class="aval">{fn(g_purch,1)}</div></div></div>
@@ -960,8 +968,8 @@ body{{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--te
   <div class="kpi cherry">
     <div class="kpi-lbl">China MTD sales (AUD)</div>
     <div class="kpi-val">{fc(china_mtd)}</div>
-    <div class="kpi-sub">{fn(china_days,0)} days elapsed of 31</div>
-    <div class="kpi-tgt">May monthly target: $3,000</div>
+    <div class="kpi-sub">{fn(china_days,0)} days elapsed this month</div>
+    <div class="kpi-tgt">Monthly target: {fc(china_tgt) if china_tgt else "$3,000"}</div>
     <div class="pb-wrap"><div class="pb cherry" style="width:{pb(china_mtd,3000)}%"></div></div>
   </div>
   <div class="kpi cherry">
@@ -998,9 +1006,7 @@ body{{font-family:'DM Sans',Arial,sans-serif;background:var(--bg);color:var(--te
 
 <div class="footer">
   <strong>How the math works:</strong> Baseline $12.2K/mo → Day 90 target $22K/mo (+80%). Sprint total: L1 $30K + L2 $15K + L3 $139K = <strong>$184K.</strong>
-  L3 carries 76% — the three most urgent gaps right now: Welcome CVR {fp(welcome_cvr)} vs 3% target, Win-back CVR {fp(winback_cvr)} vs 8% target, and Cart abandonment at {fp(cart_aband)}.
-  Meta ROAS {fx(meta_roas)} is approaching the 2.5× target. Google ROAS {fx(g_roas)} is below the 3.0× target — review keyword match types and landing page alignment.
-  Google Quality Score {fn(g_qs,0)}/10 is excellent. Repeat purchase rate {fp(repeat_rate)} is well above the 35% target — a genuine strength.
+  L3 carries 76%. Key email gaps: Welcome CVR {fp(welcome_cvr)} (tgt 3%), Win-back CVR {fp(winback_cvr)} (tgt 8%), Cart abandonment {fp(cart_aband)}. Meta ROAS {fx(meta_roas)} vs 2.5× target. Google ROAS {fx(g_roas)} vs 3.0× target. Repeat rate {fp(repeat_rate)} is a genuine strength.
   Built automatically from Master KPI Tracker · {built_at}
 </div>
 
